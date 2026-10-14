@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Production / local environment files
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# TypeScript build output
+dist/
+*.tsbuildinfo
+
+# Other env files (keep the example)
+.env.*
+!.env.example
+
+# Scratch / temporary
+backend/scratch/
+
+# Logs
+*.log
+logs/
+
+# Local uploads (agar backend files yahan save karta hai)
+uploads/

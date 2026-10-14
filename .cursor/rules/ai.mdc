@@ -1,0 +1,15 @@
+---
+description: Provider-agnostic AI interfaces, Gemini integration, and medical disclaimer mandates.
+globs: **/*{ai,gemini}*
+---
+# AI Architecture & Safety Rules
+
+## 1. Provider-Agnostic AI Integration
+* **Service Abstraction**: Never invoke the Gemini SDK directly in controllers or components. Create an abstraction layer/interface (e.g., `AIService` defining common operations) to allow seamless swap out of the AI provider.
+* **Separation of Layers**: Keep the prompt templates and parsing logic inside the backend service layer. The frontend should only call API endpoints and render the returned structured data.
+
+## 2. Safety and Medical Compliance
+* **Strict Medical Disclaimer**: Every single screen displaying AI output or medical report analysis must carry the mandatory disclaimer:
+  > **"This AI analysis is for informational purposes only and is not a medical diagnosis."**
+* **Language Rules**: Ensure prompt structures force the model to speak in simple, jargon-free, supportive, and educational language.
+* **No Definite Diagnoses**: Prompt configurations must instruct the AI model to suggest *potential considerations* or *questions to ask a doctor* rather than making absolute claims or assertions.

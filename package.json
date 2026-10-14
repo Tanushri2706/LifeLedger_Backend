@@ -1,0 +1,19 @@
+{
+  "name": "lifeledger-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "prepare": "husky",
+    "dev:web": "npm --prefix apps/web run dev"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0"
+  },
+  "dependencies": {
+    "@getbrevo/brevo": "^6.0.3"
+  }
+}

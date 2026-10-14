@@ -1,0 +1,9 @@
+{
+  "apps/web/src/**/*.{js,jsx,ts,tsx}": [
+    "npm --prefix apps/web run lint -- --fix",
+    "prettier --write"
+  ],
+  "apps/web/src/**/*.{css,json,md}": [
+    "prettier --write"
+  ]
+}

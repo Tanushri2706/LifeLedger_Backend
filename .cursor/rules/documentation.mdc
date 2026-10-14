@@ -1,0 +1,16 @@
+---
+description: Maintenance requirements for architecture docs, PRDs, API schemas, and decision records.
+globs: docs/**/*
+---
+# Documentation Rules
+
+## 1. Document Maintenance
+* **Continuous Updates**: If changes are made to requirements, features, or design systems, immediately update:
+  * `PRD.md` (Product Requirements Document)
+  * `ARCHITECTURE.md` (System Architecture)
+  * `DESIGN.md` (Design System)
+  * `API.md` (API specifications)
+* **Design Decision Tracking**: Document major architectural decisions (e.g., choice of databases, APIs, libraries) systematically with context and trade-offs.
+
+## 2. API Documentation Standards
+* Maintain clear API specifications for every endpoint, detailing request properties (types, validations, structures) and expected success/error payload shapes.

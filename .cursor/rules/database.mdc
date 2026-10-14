@@ -1,0 +1,24 @@
+---
+description: Schema design rules, indexing strategy, and constraints for MongoDB Atlas and Mongoose.
+globs: backend/src/{models,repositories}/**/*
+---
+# Database Architecture Rules
+
+## 1. Database Technologies
+* **Store**: MongoDB Atlas.
+* **ORM/ODM**: Mongoose.
+
+## 2. Access Controls
+* **Direct Queries Forbidden**: Never import models or issue query operations directly inside Controllers. All DB operations (CRUD, aggregates, transactions) must go through the **Repository Layer**.
+
+## 3. Schema Design Standards
+* **Strict Modeling**: Define explicit types and schemas. Turn validation constraints (e.g., `required`, `min`, `max`, `trim`) on by default.
+* **Indexing Strategy**:
+  * Set unique constraints in Mongoose schema configurations.
+  * Define explicit indexes for frequently queried columns (e.g., user emails, health record IDs).
+  * Build compound indexes if complex querying is required.
+* **Naming Conventions**:
+  * Schemas/Models: Singular, PascalCase (e.g., `User`, `HealthRecord`).
+  * Collections: Plural, lowercase (e.g., `users`, `healthrecords`).
+  * Fields: camelCase.
+* **Auditing**: Include timestamps (`createdAt`, `updatedAt`) automatically on all models.

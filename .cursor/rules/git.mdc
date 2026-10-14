@@ -1,0 +1,14 @@
+---
+description: Version control standards, commit structures, and change validation.
+globs: **/*
+---
+# Git and Code Modification Rules
+
+## 1. Commit Hygiene
+* **Meaningful Commits**: Write clear, imperative-mood commit messages specifying the change context (e.g., `feat(auth): integrate google oauth token validation`).
+* **Granular Commits**: Bundle code changes logically. Avoid massive, mixed commits (e.g., merging backend refactoring and styling changes in one commit).
+
+## 2. Integrity Protections
+* **Feature Preservation**: Do not delete existing features, utilities, or structures unless explicitly requested.
+* **Code Modification Boundary**: Keep modifications restricted only to files relevant to the active task. Avoid sweeping search-and-replace changes in unrelated folders.
+* **Documentation updates**: If a feature is modified or added, ensure the corresponding documentation (PRD, Architecture, or API specs) is kept in sync.

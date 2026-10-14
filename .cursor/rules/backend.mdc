@@ -1,0 +1,36 @@
+---
+description: Express.js, Node.js, REST API design, Clean architecture enforcement, and controller/service rules.
+globs: backend/**/*
+---
+# Backend Development Rules
+
+## 1. Stack Standards
+* **Framework**: Node.js, Express.js, TypeScript.
+* **Separation of Layers**:
+  * **Routes**: File paths must map endpoints to specific controller methods. No logic should run inside the route definition itself.
+  * **Controllers**: The controller acts as the request handler. It must ONLY:
+    1. Parse and validate parameters/headers/body (using Zod schemas).
+    2. Delegate execution to Services.
+    3. Return structured JSON responses with appropriate HTTP status codes.
+  * **Services**: Contain all business logic. No database connections or request validations here.
+  * **Repositories**: Orchestrate calls to Mongoose/MongoDB. Services must access data exclusively through repositories.
+
+## 2. API Design & Format
+* **Standardized JSON Envelope**:
+  * **Success Response (2xx/3xx)**:
+    ```json
+    {
+      "success": true,
+      "message": "Operation completed successfully.",
+      "data": {}
+    }
+    ```
+  * **Error Response (4xx/5xx)**:
+    ```json
+    {
+      "success": false,
+      "message": "User-friendly description of error.",
+      "error": {}
+    }
+    ```
+* **No Leaked Errors**: Never expose raw system error messages or stack traces to the client. Format error outputs inside a centralized error-handling middleware.

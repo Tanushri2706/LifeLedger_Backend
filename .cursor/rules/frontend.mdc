@@ -1,0 +1,25 @@
+---
+description: Code quality rules for Next.js 15, React 19, App Router, tailwindcss, TanStack Query, and forms.
+globs: frontend/**/*
+---
+# Frontend Development Rules
+
+## 1. Core Framework Standards
+* **Framework**: Next.js 15, React 19, TypeScript, Tailwind CSS.
+* **Rendering Paradigm**: Use React Server Components (RSC) by default for pages, layouts, and static elements. Use `"use client"` only for files requiring state, context providers, user interaction handlers, or browser-only APIs.
+* **State Boundaries**:
+  * Use **TanStack Query** (React Query) for Server State (fetching, caching, synchronization, mutations).
+  * Use **React Context** sparingly for global Client State (e.g., Theme, Authentication status).
+  * Use standard local state (`useState`, `useReducer`) for isolated UI states.
+
+## 2. Dynamic State Handling
+* **Loading States**: Design a custom skeleton placeholder loader for every dynamic component.
+* **Empty States**: Never show a blank container. Render a structured, illustrative empty state directing the user to action.
+* **Error Boundaries**: Wrap features with error boundaries that present helpful, context-specific messages and a retry mechanism.
+
+## 3. Form Rules
+* **Tech**: Always use `react-hook-form` paired with `zod` for schemas and validation.
+* **UX Rules**:
+  * Provide inline validation messages.
+  * Disable submit buttons during pending submissions (`isSubmitting`).
+  * Provide loading states inside forms while mutations run.

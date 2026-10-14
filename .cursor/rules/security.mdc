@@ -1,0 +1,19 @@
+---
+description: Authentication flows, JWT guidelines, Google OAuth, Express security middlewares, and validation.
+globs: **/*
+---
+# Security Principles and Rules
+
+## 1. Authentication & Authorization
+* **JWT Storage**: Store access tokens strictly in memory (frontend state) and refresh tokens inside HTTP-only, secure, SameSite cookies.
+* **Role-Based Access Control (RBAC)**: Protect routes using explicit middleware checks. Define clear permission tiers: `User`, `Doctor`, and `Admin`.
+* **Credential Protection**: Always encrypt passwords before saving to the database using `bcrypt` (minimum 10 rounds).
+
+## 2. API Hardening
+* **Express Middlewares**: Set up security headers on the Express app using `helmet()`.
+* **Rate Limiting**: Protect endpoints against brute force using rate-limiting middleware. Apply a highly restrictive limit to auth routes (`/api/auth/*`).
+* **Secrets Management**: Never commit credential tokens, private keys, database links, or API secrets. Maintain them solely in `.env` files.
+
+## 3. Data Integrity
+* **Double Validation**: Never rely on frontend client-side validation. Perform secondary validation using Zod schemas for all backend controller payloads.
+* **XSS Protection**: Sanitize input fields prior to database persistence.
