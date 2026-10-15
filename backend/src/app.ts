@@ -14,8 +14,8 @@ import {
 export const createApp = (): Application => {
   const app: Application = express();
 
-  // Enable trust proxy for reverse proxies / load balancers
-  app.set('trust proxy', 1);
+  // Trust 2 proxy hops (Vercel rewrite -> Render proxy -> app) so req.ip is the real client IP
+  app.set('trust proxy', 2);
 
   // 1. Security HTTP Headers
   app.use(helmet());
@@ -53,7 +53,7 @@ export const createApp = (): Application => {
   // 3. Lightweight Request Logging (privacy safe, no credentials/PHI)
   app.use(requestLogger);
 
-  // 4. Global API Rate Limiting
+  // 4. Global API Rate Limiting (health check is skipped inside the limiter)
   app.use(globalRateLimiter);
 
   // 5. Body & Cookie Parsing with Strict Payload Limits

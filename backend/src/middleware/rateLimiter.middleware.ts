@@ -24,6 +24,8 @@ export const createRateLimiter = (customOptions: Partial<Options> = {}) => {
 export const globalRateLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   limit: 100,
+  // Health checks (Render + UptimeRobot) must never be rate limited
+  skip: (req: Request) => req.originalUrl.startsWith('/api/v1/health'),
   message: 'Too many requests from this IP, please try again after 15 minutes.'
 });
 

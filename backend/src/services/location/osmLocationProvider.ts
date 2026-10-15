@@ -62,6 +62,7 @@ export class OsmLocationProvider implements ILocationProvider {
   private readonly requestTimeoutMs: number;
   private readonly userAgent: string;
   private readonly enableCache: boolean;
+  private readonly overpassMirrors: string[];
 
   // In-memory caching with TTL
   private readonly nearbyCache = new Map<string, { timestamp: number; data: IPlaceResult[] }>();
@@ -81,8 +82,16 @@ export class OsmLocationProvider implements ILocationProvider {
     this.nominatimUrl = options.nominatimUrl || 'https://nominatim.openstreetmap.org';
     this.requestTimeoutMs = options.requestTimeoutMs ?? 25000;
     this.userAgent =
-      options.userAgent || 'LifeLedger-HealthApp/1.0 (https://lifeledger.health; support@lifeledger.health)';
+      options.userAgent ||
+      'LifeLedger-HealthApp/1.0 (https://lifeledger-health.vercel.app; lifeledger.support@gmail.com)';
     this.enableCache = options.enableCache ?? true;
+
+    // Primary server first, then public mirrors as fallbacks (deduplicated)
+    this.overpassMirrors = [
+      this.overpassUrl,
+      'https://overpass.kumi.systems/api/interpreter',
+      'https://overpass.private.coffee/api/interpreter'
+    ].filter((u, i, arr) => arr.indexOf(u) === i);
   }
 
   /**
@@ -123,6 +132,15 @@ export class OsmLocationProvider implements ILocationProvider {
       });
       return response;
     } catch (error: unknown) {
+      const cause =
+        error instanceof Error ? (error as Error & { cause?: unknown }).cause : undefined;
+      console.error(
+        '[OSM] fetch failed:',
+        url,
+        error instanceof Error ? error.message : error,
+        cause ?? ''
+      );
+
       if (error instanceof Error && error.name === 'AbortError') {
         throw new AppError(
           `OpenStreetMap API request timed out after ${Math.round(timeoutMs / 1000)} seconds`,
@@ -136,6 +154,45 @@ export class OsmLocationProvider implements ILocationProvider {
     } finally {
       clearTimeout(timer);
     }
+  }
+
+  /**
+   * Tries each Overpass server in order; falls through to the next on
+   * network errors, timeouts, or 429/502/503/504 responses.
+   */
+  private async fetchOverpass(body: string): Promise<Response> {
+    let lastError: unknown = null;
+    let lastResponse: Response | null = null;
+
+    for (const url of this.overpassMirrors) {
+      try {
+        const response = await this.safeFetch(url, {
+          method: 'POST',
+          body,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          },
+          timeoutMs: 15000
+        });
+        if ([429, 502, 503, 504].includes(response.status)) {
+          console.warn(`[OSM] Overpass ${url} returned ${response.status}, trying next server`);
+          lastResponse = response;
+          continue;
+        }
+        return response;
+      } catch (error) {
+        console.warn(
+          `[OSM] Overpass ${url} failed:`,
+          error instanceof Error ? error.message : error
+        );
+        lastError = error;
+      }
+    }
+
+    if (lastResponse) return lastResponse;
+    throw lastError instanceof Error
+      ? lastError
+      : new AppError('Network connection to OpenStreetMap API failed', 502);
   }
 
   /**
@@ -154,8 +211,8 @@ export class OsmLocationProvider implements ILocationProvider {
 
     const nextTask = this.nominatimQueue.then(execute, execute);
     this.nominatimQueue = nextTask.then(
-      () => {},
-      () => {}
+      () => { },
+      () => { }
     );
     return nextTask as Promise<T>;
   }
@@ -522,13 +579,7 @@ export class OsmLocationProvider implements ILocationProvider {
       );
       const body = `data=${encodeURIComponent(overpassQuery)}`;
 
-      const response = await this.safeFetch(this.overpassUrl, {
-        method: 'POST',
-        body,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-      });
+      const response = await this.fetchOverpass(body);
 
       if (response.status === 429) {
         throw new AppError(
