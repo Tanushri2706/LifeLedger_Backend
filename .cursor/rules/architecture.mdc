@@ -1,0 +1,34 @@
+---
+description: Enforce system architecture patterns, SOLID principles, DRY, and modular layout rules.
+globs: **/*
+---
+# System Architecture Rules
+
+## 1. Modular and Clean Architecture
+* **Strict Decoupling**: Keep frontend and backend completely independent. Communication must flow strictly through REST APIs.
+* **Separation of Concerns**:
+  * **Controllers**: Receive requests, validate inputs, delegate to services, and return responses.
+  * **Services**: Contain 100% of the business logic. No business logic in controllers, UI components, or models.
+  * **Repositories**: Contain all data access and MongoDB queries. Never query models directly from controllers or services.
+  * **Models**: Define schemas and simple Mongoose methods. Never perform side effects here.
+
+## 2. SOLID and DRY Principles
+* **Single Responsibility**: Each class, hook, function, or file must do one thing well.
+* **Don't Repeat Yourself (DRY)**: Abstract repeated logic into reusable utility functions, hooks, or shared services.
+* **Open/Closed**: Design modules to be open for extension but closed for modification. Prefer composition over inheritance.
+
+## 3. Directory Layout Consistency
+* **Frontend Structure (Feature-Based)**:
+  * Organize code inside `frontend/src/features/[featureName]/` (e.g., auth, timeline, reports).
+  * Each feature should encapsulate its own:
+    * `/components` (feature-specific UI)
+    * `/hooks` (feature-specific state/logic)
+    * `/services` (API integrations)
+    * `/types` (domain TypeScript definitions)
+* **Backend Structure (Layered Clean Architecture)**:
+  * Organize code inside `backend/src/`:
+    * `/routes` (express route mappings)
+    * `/controllers` (request parsing/validation)
+    * `/services` (business logic orchestration)
+    * `/repositories` (data access layers)
+    * `/models` (mongoose models)

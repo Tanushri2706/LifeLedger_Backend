@@ -1,0 +1,20 @@
+---
+description: Premium Apple-style design aesthetics, spacing, colors, typography, and dark mode configs.
+globs: frontend/src/{components,styles,app}/**/*
+---
+# UI Design System Rules
+
+## 1. Visual Aesthetics
+* **Theme**: Apple/Stripe-inspired. Elegant, minimal, trustworthy. Large typography, soft spacing, clean layouts, and rounded edges.
+* **Component Geometry**:
+  * Cards: `border-radius: 20px`
+  * Inputs: `border-radius: 14px`
+  * Buttons: `border-radius: 12px`
+  * Modals: `border-radius: 24px`
+  * Badges: `border-radius: 999px`
+* **Lighting and Shadows**: Use only lightweight, soft drop-shadows. Avoid harsh borders or blocky shadows. Implement glassmorphism using backdrop filters for panels and headers.
+
+## 2. Dynamic Details
+* **Animations**: All motion must rely on `framer-motion`. Allowable animations are minimal: Fade-ins, slide-ins, scales, hover lifts, page transitions. Never introduce erratic bouncing, spinning, or flashing.
+* **Theme Support**: Design every layout to support Light and Dark themes natively. Ensure colors map cleanly to the custom theme variables (Primary Blue `#2563EB`, Dark Theme background `#0F172A`, Surface `#FFFFFF`, etc.).
+* **Icons**: Standardize on **Lucide React**. Never mix icon libraries.

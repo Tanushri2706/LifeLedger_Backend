@@ -1,0 +1,14 @@
+---
+description: Strict TypeScript rules, explicit type mapping, and interfaces conventions.
+globs: **/*.ts{,x}
+---
+# TypeScript Coding Standards
+
+## 1. Type Safety
+* **Strict Checks**: Never use `any`. Always specify structured interface/type bounds.
+* **Explicit Types**: Declare return types explicitly for all public service functions, controller handlers, and hooks. Avoid relying on implicit dynamic type inference for critical functions.
+
+## 2. Declarations and Naming
+* **Interfaces vs. Types**: Prefer `interface` for object structures and component properties to allow extension. Use `type` for unions, intersections, or utility types.
+* **Domain Model Alignment**: Maintain a centralized `/types` package or folder to sync type models between frontend features and backend schema definitions.
+* **Component Typing**: Always explicitly type React component properties using TypeScript interfaces.
